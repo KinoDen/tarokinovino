@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <base href="/tarokinovino/">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Таро Гадание</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+    }
+    .tarot-container {
+      margin: 20px auto;
+      max-width: 600px;
+      display: none;
+    }
+    .card {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      background-color: #34495e;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #34495e;
+      border: 1px solid #7f8c8d;
+      border-radius: 5px;
+    }
+    .layout-options {
+      margin: 20px;
+    }
+    .layout-options button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #2980b9;
+      color: #ecf0f1;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .layout-options button:hover {
+      background-color: #3498db;
+    }
+    .bg-options button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #2980b9;
+      color: #ecf0f1;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .bg-options button:hover {
+      background-color: #3498db;
+    }
+    .footer {
+      margin-top: 40px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .footer a {
+      text-decoration: none;
+      color: #ecf0f1;
+      font-size: 22px;
+    }
+    .footer a:hover {
+      color: #f39c12;
+    }
+  </style>
+</head>
+<body>
+  <h1>Гадание на картах Таро</h1>
+  <p>Выберите расклад, чтобы начать.</p>
+
+  <div class="layout-options">
+    <button data-layout="one">Карта дня</button>
+    <button data-layout="three">Прошлое, настоящее, будущее</button>
+    <button data-layout="five">Пять карт</button>
+  </div>
+
+  <div class="tarot-container" id="tarotContainer">
+    <div class="card" data-index="0"><img src="images/back.jpg" alt="Карта 1"></div>
+    <div class="card" data-index="1"><img src="images/back.jpg" alt="Карта 2"></div>
+    <div class="card" data-index="2"><img src="images/back.jpg" alt="Карта 3"></div>
+    <div class="card" data-index="3"><img src="images/back.jpg" alt="Карта 4"></div>
+    <div class="card" data-index="4"><img src="images/back.jpg" alt="Карта 5"></div>
+  </div>
+
+  <div class="result" id="result">Ваш расклад появится здесь.</div>
+
+  <div class="bg-options">
+    <button data-bg="#2c3e50">Темный фон</button>
+    <button data-bg="#2980b9">Синий фон</button>
+    <button data-bg="#27ae60">Зеленый фон</button>
+  </div>
+
+  <!-- Добавлена надпись с ссылкой -->
+  <div class="footer">
+    <p>Лучшие фильмы здесь: <a href="https://vk.com/club228701164" target="_blank">Кино_Вино</a></p>
+  </div>
+
+  <script>
+    const cards = [
+      { name: "Шут", meaning: "Новый старт, приключения.", image: "images/fool.jpg", readings: [
+          "Ты стоишь на пороге нового начала. Пришло время рискнуть.",
+          "Иногда самые смелые шаги — это просто выйти за порог.",
+          "Ты не один, даже если в этом путешествии ты стоишь на краю пропасти."
+      ]},
+      { name: "Маг", meaning: "Сила воли, инициатива.", image: "images/magician.jpg", readings: [
+          "Теперь твоя воля — это магия, не упусти свой шанс.",
+          "Ты можешь превратить любой момент в шедевр, используй свою силу.",
+          "Если ты хочешь изменить мир, начни с себя. Магия внутри."
+      ]},
+      { name: "Жрица", meaning: "Интуиция, тайны.", image: "images/priestess.jpg", readings: [
+          "Ты стоишь на пороге откровений, прислушайся к своему внутреннему голосу.",
+          "Интуиция — твой лучший друг. Слушай ее.",
+          "Тайны не всегда должны быть раскрыты. Иногда достаточно знать, что они есть."
+      ]},
+      { name: "Императрица", meaning: "Рост, изобилие.", image: "images/empress.jpg", readings: [
+          "Ты созидаешь будущее. Твоя энергия — это плодородная почва.",
+          "Рост — это не просто движение вперед. Это погружение в себя.",
+          "Сила изобилия начинается с твоей души. Поверь в себя."
+      ]},
+      { name: "Император", meaning: "Структура, власть.", image: "images/emperor.jpg", readings: [
+          "Ты — архитектор своей судьбы. Время строить.",
+          "Сила начинается с порядка. Возьми контроль в свои руки.",
+          "Каждый шаг должен быть уверен, каждый момент — контролируем."
+      ]},
+      { name: "Влюбленные", meaning: "Выбор, гармония.", image: "images/lovers.jpg", readings: [
+          "Время выбирать. Но помни, выбор всегда влияет на будущее.",
+          "В гармонии ты найдешь свой путь.",
+          "Ты можешь найти любовь в самых неожиданных местах, главное — открыться."
+      ]},
+      { name: "Колесо Фортуны", meaning: "Удача, перемены.", image: "images/wheel.jpg", readings: [
+          "Судьба закрутила колесо. Не бойся перемен — они принесут тебе удачу.",
+          "Каждый поворот приносит новый шанс. И ты готов к нему.",
+          "Не бойся рисковать, удача на твоей стороне."
+      ]},
+      { name: "Сила", meaning: "Мужество, терпение.", image: "images/strength.jpg", readings: [
+          "Ты можешь быть сильным, даже если не видишь этого прямо сейчас.",
+          "Твоя сила в том, что ты никогда не сдаешься.",
+          "Мужество не в том, чтобы бороться. Мужество — это не бояться."
+      ]},
+      { name: "День плохой кому не пох", meaning: "Безразличие, расслабление", image: "images/no-care.jpg", readings: [
+          "Сегодня твой день отдыха. Отключись от всего и просто наслаждайся моментом.",
+          "Не переживай! Все будет так, как должно быть.",
+          "Ты заслуживаешь расслабления. Пора просто не думать о проблемах."
+      ]},
+      { name: "Нужно срочно посмотреть кино и вино", meaning: "Отдых, расслабление", image: "images/movie-wine.jpg", readings: [
+          "Сегодня твой день для отдыха. Вино, кино и немного покоя.",
+          "Погрузись в мир кино и расслабься — все, что тебе нужно.",
+          "Не думай о будущем. Просто наслаждайся настоящим!"
+      ]},
+      // Здесь добавьте остальные карты по аналогии...
+    ];
+
+    const tarotContainer = document.getElementById('tarotContainer');
+    const resultDiv = document.getElementById('result');
+    const layoutButtons = document.querySelectorAll('.layout-options button');
+    const cardElements = document.querySelectorAll('.card');
+    const bgButtons = document.querySelectorAll('.bg-options button');
+
+    let currentLayout = '';
+    let usedCards = [];
+
+    layoutButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const layout = button.getAttribute('data-layout');
+
+        if (layout !== currentLayout) {
+          resultDiv.textContent = '';
+          tarotContainer.style.display = 'block';
+          resetCards();
+
+          switch (layout) {
+            case 'one':
+              showCards(1);
+              break;
+            case 'three':
+              showCards(3);
+              break;
+            case 'five':
+              showCards(5);
+              break;
+          }
+
+          currentLayout = layout;
+        }
+      });
+    });
+
+    cardElements.forEach(card => {
+      card.addEventListener('click', () => {
+        const cardIndex = card.getAttribute('data-index');
+        const selectedCard = cards[cardIndex];
+
+        if (!usedCards.includes(cardIndex)) {
+          const randomReading = getRandomElement(selectedCard.readings);
+          resultDiv.textContent = `${selectedCard.name}: ${randomReading}`;
+          usedCards.push(cardIndex);
+        }
+      });
+    });
+
+    bgButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        document.body.style.backgroundColor = button.getAttribute('data-bg');
+      });
+    });
+
+    function showCards(number) {
+      let cardIndexes = [];
+
+      while (cardIndexes.length < number) {
+        let randomIndex = Math.floor(Math.random() * cards.length);
+        if (!cardIndexes.includes(randomIndex)) {
+          cardIndexes.push(randomIndex);
+          const cardElement = cardElements[randomIndex];
+          cardElement.querySelector('img').src = cards[randomIndex].image;
+        }
+      }
+    }
+
+    function resetCards() {
+      cardElements.forEach(card => {
+        card.querySelector('img').src = 'images/back.jpg';
+      });
+
+      usedCards = [];
+    }
+
+    function getRandomElement(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+  </script>
+</body>
+</html>
